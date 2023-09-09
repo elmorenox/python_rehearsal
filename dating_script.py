@@ -106,91 +106,92 @@ def pretty_print_order_and_budget(orders, budget):
     print(f"💰 Remaining Budget: ${budget} 💰")
 
 
-print("*" * 35)
-print(" 💕 Welcome to terminal dating 💘")
-print("*" * 35)
+if __name__ == "__main__":
+    print("*" * 35)
+    print(" 💕 Welcome to terminal dating 💘")
+    print("*" * 35)
 
-player_name = input("\nWhat is your name? ").strip()
+    player_name = input("\nWhat is your name? ").strip()
 
-print(f"\nOk {player_name}, let's get started\n")
+    print(f"\nOk {player_name}, let's get started\n")
 
-dates_name = input("What is your date's name? ").strip()
+    dates_name = input("What is your date's name? ").strip()
 
-sleep(1)
+    sleep(1)
 
-tip = f"\nTIP: If you can afford to pay for {dates_name}'s meal and your own meal \n"
-tip += "AND stay under budget then you get a second date!\n"
+    tip = f"\nTIP: If you can afford to pay for {dates_name}'s meal and your own meal \n"
+    tip += "AND stay under budget then you get a second date!\n"
 
-print(tip)
+    print(tip)
 
-sleep(8)
+    sleep(8)
 
-budget = ""
-while not is_valid_dollar_amount(budget):
-    budget = sanitize_string(
-        input("What is your budget? Give us a number over 0: ")
+    budget = ""
+    while not is_valid_dollar_amount(budget):
+        budget = sanitize_string(
+            input("What is your budget? Give us a number over 0: ")
+        )
+
+    print(f"\nOk let's see how your date goes with ${budget}\n")
+
+    sleep(3)
+
+    print("Let's take your order. We'll start with Entrees:\n")
+
+    sleep(2)
+
+    budget = Decimal(budget)
+    order = []
+
+    valid_entree_ids = print_menu_and_get_ids(Entrees)
+    budget, order = take_order_and_update_budget(
+        Entrees,
+        valid_entree_ids,
+        budget,
+        order
     )
 
-print(f"\nOk let's see how your date goes with ${budget}\n")
+    pretty_print_order_and_budget(order, budget)
 
-sleep(3)
+    sleep(2)
 
-print("Let's take your order. We'll start with Entrees:\n")
+    print("\nNow for some Sides or Desserts:\n")
 
-sleep(2)
+    valid_sides_dessert_ids = print_menu_and_get_ids(SidesDessert)
+    budget, order = take_order_and_update_budget(
+        SidesDessert,
+        valid_sides_dessert_ids,
+        budget,
+        order
+    )
 
-budget = Decimal(budget)
-order = []
+    pretty_print_order_and_budget(order, budget)
 
-valid_entree_ids = print_menu_and_get_ids(Entrees)
-budget, order = take_order_and_update_budget(
-    Entrees,
-    valid_entree_ids,
-    budget,
-    order
-)
+    sleep(2)
 
-pretty_print_order_and_budget(order, budget)
+    print("\nAnd lastly, some drink:\n")
 
-sleep(2)
+    valid_drink_ids = print_menu_and_get_ids(Drinks)
+    budget, order = take_order_and_update_budget(
+        Drinks,
+        valid_drink_ids,
+        budget,
+        order
+    )
 
-print("\nNow for some Sides or Desserts:\n")
+    pretty_print_order_and_budget(order, budget)
 
-valid_sides_dessert_ids = print_menu_and_get_ids(SidesDessert)
-budget, order = take_order_and_update_budget(
-    SidesDessert,
-    valid_sides_dessert_ids,
-    budget,
-    order
-)
+    sleep(2)
 
-pretty_print_order_and_budget(order, budget)
+    print("\nNow for the big moment:\n")
+    sleep(.75)
+    print("❓")
+    sleep(.75)
+    print("🧐")
+    sleep(.75)
+    print("🥁")
 
-sleep(2)
-
-print("\nAnd lastly, some drink:\n")
-
-valid_drink_ids = print_menu_and_get_ids(Drinks)
-budget, order = take_order_and_update_budget(
-    Drinks,
-    valid_drink_ids,
-    budget,
-    order
-)
-
-pretty_print_order_and_budget(order, budget)
-
-sleep(2)
-
-print("\nNow for the big moment:\n")
-sleep(.75)
-print("❓")
-sleep(.75)
-print("🧐")
-sleep(.75)
-print("🥁")
-
-if budget >= 0:
-    print(f"\nCongratulations {player_name}! You've stayed under budget with ${budget} remaining. You win a second date with {dates_name}! 🥳")
-else:
-    print(f"\nSorry {player_name}, you've gone over budget. Better luck next time! 💔")
+    if budget >= 0:
+        print(f"\nCongratulations {player_name}! You've stayed under budget with ${budget} remaining. You win a second date with {dates_name}! 🥳")
+    else:
+        print(f"\nSorry {player_name}, you've gone over budget. Better luck next time! 💔")
