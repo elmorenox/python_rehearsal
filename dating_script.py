@@ -7,12 +7,19 @@ import re
 
 @dataclass
 class Menu_item:
+    """
+    Chose to use a dataclass for Menu_items so have type checking if the menu is expanded.
+    """
     name: str
     id: int
     price: Decimal
 
 
 class ItemByIDMixin:
+    """
+    This a mixin that is inherited by the different course enum.
+    This allows us to lookup an item in the course by id
+    """
     @classmethod
     def get_item_by_id(cls, id):
         for item in cls:
@@ -22,6 +29,10 @@ class ItemByIDMixin:
 
 
 class Entrees(ItemByIDMixin, Enum):
+    """
+    We use an enum for each course for readability and to more easily add items in the future. 
+    The performance for a program like this between an enum and dictionary is negligible
+    """
     JERK_CHICKEN = Menu_item("Jerk Chicken", 1, 12.00)
     GRILLED_SALMON = Menu_item("Grilled Salmon", 2, 15.00)
     STEAK = Menu_item("Steak", 3, 20.00)
@@ -55,11 +66,20 @@ class SidesDessert(ItemByIDMixin, Enum):
 
 
 def sanitize_string(input_amount):
+    """
+    this functions uses a regex to clean the budget input
+    This strip all characters that is not a number
+    and only allows a decimal if two numbers follow it
+    """
     # https://regex101.com/r/7TP0jL/1
     return re.sub(r'[^\d.]', '', input_amount)
 
 
 def is_valid_dollar_amount(sanitized_amount):
+    """
+    This functions checks if the sanitized budge input is a valid decimal amount
+    and a number greater than 0
+    """
     try:
         if Decimal(sanitized_amount) >= 0:
             return True
@@ -68,6 +88,9 @@ def is_valid_dollar_amount(sanitized_amount):
 
 
 def print_menu_and_get_ids(course_enum):
+    """
+    This function prints each course and returns valid ids so that we can use them to validate orders
+    """
     valid_ids = []
 
     for item in course_enum:
@@ -82,6 +105,11 @@ def print_menu_and_get_ids(course_enum):
 
 
 def take_order_and_update_budget(course_enum, valid_ids, budget, order):
+    """
+    This function adds orders from a course to the total order. it updates the budger
+    This function returns the updated budget and order
+    It's not super dumb in that it validates course menu items id
+    """
     course_order = [
         course_enum.get_item_by_id(int(id))
         for id
@@ -92,12 +120,19 @@ def take_order_and_update_budget(course_enum, valid_ids, budget, order):
     for item in course_order:
         budget -= Decimal(item.value.price)
 
+    if budget <= 0:
+        print("\n🏃🏽💨\nSorry your date left because you ran out money\n😥😭💸")
+        exit()
+
     order.extend(course_order)
 
     return budget, order
 
 
 def pretty_print_order_and_budget(orders, budget):
+    """
+    This function is used to print the total order and budget after each course order
+    """
     print("\n🍽️ Your Order 🍽️")
     print("-----------------------")
 
@@ -113,14 +148,18 @@ if __name__ == "__main__":
     print(" 💕 Welcome to terminal dating 💘")
     print("*" * 35)
 
+    # Capture user's name
     player_name = input("\nWhat is your name? ").strip()
 
     print(f"\nOk {player_name}, let's get started\n")
 
+    # Capture a user's date anem
     dates_name = input("What is your date's name? ").strip()
 
+    # We use sleep for readability and experience
     sleep(1)
 
+    # Presenting the rules of the game to the user
     tip = f"\nTIP: If you can afford to pay for {dates_name}'s meal and your own meal \n"
     tip += "AND stay under budget then you get a second date!\n"
 
@@ -128,7 +167,9 @@ if __name__ == "__main__":
 
     sleep(8)
 
+    # Prepare a budget variable to capture the user's budget
     budget = ""
+    # Until the budget is valid we prompt the user for their budget
     while not is_valid_dollar_amount(budget):
         budget = sanitize_string(
             input("What is your budget? Give us a number over 0: ")
@@ -142,9 +183,13 @@ if __name__ == "__main__":
 
     sleep(2)
 
+    # Convert validated budget string to decimal so we can run calculations with it
     budget = Decimal(budget)
+
+    # We set an order var to capture the user's order. This is updated after each course order
     order = []
 
+    # We print the courses menu items and capture the selections
     valid_entree_ids = print_menu_and_get_ids(Entrees)
     budget, order = take_order_and_update_budget(
         Entrees,
@@ -193,6 +238,7 @@ if __name__ == "__main__":
     sleep(.75)
     print("🥁")
 
+    # if there is a remaining budget then the user wins a second date
     if budget >= 0:
         print(f"\nCongratulations {player_name}! You've stayed under budget with ${budget} remaining. You win a second date with {dates_name}! 🥳")
     else:
