@@ -12,7 +12,16 @@ class Menu_item:
     price: Decimal
 
 
-class Entrees(Enum):
+class ItemByIDMixin:
+    @classmethod
+    def get_item_by_id(cls, id):
+        for item in cls:
+            if item.value.id == id:
+                return item
+        return None
+
+
+class Entrees(ItemByIDMixin, Enum):
     JERK_CHICKEN = Menu_item("Jerk Chicken", 1, 12.00)
     GRILLED_SALMON = Menu_item("Grilled Salmon", 2, 15.00)
     STEAK = Menu_item("Steak", 3, 20.00)
@@ -23,7 +32,7 @@ class Entrees(Enum):
     CHICKEN_ALFREDO = Menu_item("Chicken Alfredo", 8, 13.00)
 
 
-class Drinks(Enum):
+class Drinks(ItemByIDMixin, Enum):
     WATER = Menu_item("Water", 1, 0.00)
     SODA = Menu_item("Soda", 2, 2.50)
     BEER = Menu_item("Beer", 3, 5.00)
@@ -34,7 +43,7 @@ class Drinks(Enum):
     COFFEE = Menu_item("Coffee", 8, 3.00)
 
 
-class SidesDessert(Enum):
+class SidesDessert(ItemByIDMixin, Enum):
     FRIES = Menu_item("Fries", 1, 4.00)
     SALAD = Menu_item("Salad", 2, 5.00)
     CHEESECAKE = Menu_item("Cheesecake", 3, 6.00)
@@ -58,13 +67,6 @@ def is_valid_dollar_amount(sanitized_amount):
         return False
 
 
-def get_item_by_id(category, id):
-    for item in category:
-        if item.value.id == id:
-            return item
-    return None
-
-
 def print_menu_and_get_ids(course_enum):
     valid_ids = []
 
@@ -81,7 +83,7 @@ def print_menu_and_get_ids(course_enum):
 
 def take_order_and_update_budget(course_enum, valid_ids, budget, order):
     course_order = [
-        get_item_by_id(course_enum, int(id))
+        course_enum.get_item_by_id(int(id))
         for id
         in input(f"\nWhich {course_enum.__name__.lower()}'s would you like? ")
         if id.isdigit() and int(id) in valid_ids
