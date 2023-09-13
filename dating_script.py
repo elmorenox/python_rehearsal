@@ -106,7 +106,7 @@ def print_menu_and_get_ids(course_enum):
 
 def take_order_and_update_budget(course_enum, valid_ids, budget, order):
     """
-    This function adds orders from a course to the total order. it updates the budger
+    This function adds orders from a course to the total order. it updates the budget
     This function returns the updated budget and order
     It's not super dumb in that it validates course menu items id
     """
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     print(f"\nOk {player_name}, let's get started\n")
 
-    # Capture a user's date anem
+    # Capture a user's date name
     dates_name = input("What is your date's name? ").strip()
 
     # We use sleep for readability and experience
@@ -189,46 +189,28 @@ if __name__ == "__main__":
     # We set an order var to capture the user's order. This is updated after each course order
     order = []
 
-    # We print the courses menu items and capture the selections
-    valid_entree_ids = print_menu_and_get_ids(Entrees)
-    budget, order = take_order_and_update_budget(
-        Entrees,
-        valid_entree_ids,
-        budget,
-        order
-    )
+    courses = [Entrees, SidesDessert, Drinks]
 
-    pretty_print_order_and_budget(order, budget)
+    for course in courses:
+        if course.__name__ == "SidesDessert":
+            print("\nNow for some Sides or Desserts:\n")
+        elif course.__name__ == "Drinks":
+            print("\nAnd lastly, some drinks:\n")
 
-    sleep(2)
+        sleep(2)
 
-    print("\nNow for some Sides or Desserts:\n")
+        # We print the courses menu items and capture the selections
+        valid_course_ids = print_menu_and_get_ids(course)
+        budget, order = take_order_and_update_budget(
+            course,
+            valid_course_ids,
+            budget,
+            order
+        )
 
-    valid_sides_dessert_ids = print_menu_and_get_ids(SidesDessert)
-    budget, order = take_order_and_update_budget(
-        SidesDessert,
-        valid_sides_dessert_ids,
-        budget,
-        order
-    )
+        pretty_print_order_and_budget(order, budget)
 
-    pretty_print_order_and_budget(order, budget)
-
-    sleep(2)
-
-    print("\nAnd lastly, some drink:\n")
-
-    valid_drink_ids = print_menu_and_get_ids(Drinks)
-    budget, order = take_order_and_update_budget(
-        Drinks,
-        valid_drink_ids,
-        budget,
-        order
-    )
-
-    pretty_print_order_and_budget(order, budget)
-
-    sleep(2)
+        sleep(2)
 
     print("\nNow for the big moment:\n")
     sleep(.75)
