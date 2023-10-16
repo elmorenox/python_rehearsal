@@ -4,7 +4,7 @@ import requests
 url = "https://free-nba.p.rapidapi.com/players"
 
 headers = {
-	"X-RapidAPI-Key": "d4c2df8ae2msh3190d5e7ffb1d20p137876jsn03021e078112",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "free-nba.p.rapidapi.com"
 }
 querystring = {"page":"1","per_page":"100"}
