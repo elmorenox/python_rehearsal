@@ -1,7 +1,7 @@
 import csv
 import requests
 
-# base url and endpoing for players information
+# base url and endpoint for players information
 url = "https://free-nba.p.rapidapi.com/players"
 
 # providing credentials
@@ -10,7 +10,7 @@ headers = {
 	"X-RapidAPI-Host": "free-nba.p.rapidapi.com"
 }
 
-# Setting the page to beging with and the amount of results in a response
+# Setting the page to begin with and the amount of results in a response
 querystring = {"page":"0","per_page":"100"}
 
 # initializing a list to store list of dictionaries with player info
@@ -23,7 +23,8 @@ while next_page is not None:
     response = requests.get(url, headers=headers, params=querystring)
 	# grabbing our response
     data = response.json()
-	# assigning list of player dictioaries that we will append to our players list
+
+	# assigning list of player dictionaries that we will append to our players list
     players_batch = data["data"]
 
 	# iterating through the players list in the response to create dictionary with the information required.
@@ -39,7 +40,7 @@ while next_page is not None:
 	    # adding list of players to response to our parent list of players
         players.append(player)
 	    
-	# assigning next_page so that we can check if we need to iterate agains
+	# assigning next_page so that we can check if we need to iterate again
     next_page = data["meta"]["next_page"]
 	# assigning the next_page number so that we call the next page on our next request
     querystring["page"] =  f"{next_page}"
