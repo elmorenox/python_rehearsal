@@ -24,6 +24,6 @@ for proc in ps.process_iter():
 # pass the processes list to the csv writer using dictionary writer
 with open(csv_file, 'w', newline='') as file:
     # fieldnames is a list of the keys in the dictionary. ignore extra keys
-    writer = csv.DictWriter(file, fieldnames=["pid", "name", "exe", "cpu_percent", "memory"], extrasaction='ignore')
+    writer = csv.DictWriter(file, fieldnames=["pid", "name", "exe", "memory", "cpu_percent"], extrasaction='ignore')
     writer.writeheader()
     writer.writerows(processes)
