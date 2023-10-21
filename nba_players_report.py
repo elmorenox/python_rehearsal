@@ -48,6 +48,6 @@ while next_page is not None:
 
 # passing our list of dictionaries to the csv dictionary writer
 with open("nba_players_report.csv", mode='w', newline='') as file:
-    writer = csv.DictWriter(file, ["id", "full_name", "position", "team"])
+    writer = csv.DictWriter(file, ["id", "first_name", "last_name" ,"full_name", "position", "team"])
     writer.writeheader()
     writer.writerows(players)
